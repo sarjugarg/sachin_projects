@@ -1,0 +1,90 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch ImageComparision",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.ImageComparision",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch DupPhotoFinder",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.DupPhotoFinder",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test1",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.Test1",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.test",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch tet",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.tet",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch SimpleMDC",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.RecommendationApi.SimpleMDC",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.RecommendationApi.Test",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch tester",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.RecommendationApi.tester",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BootApplication<Innotrust>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.giftingnetwork.config.BootApplication",
+            "projectName": "Innotrust",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BootApplication<Innotrust>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.giftingnetwork.api.BootApplication",
+            "projectName": "Innotrust",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-TwoWaySerialComm<Innotrust>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.giftingnetwork.api.TwoWaySerialComm",
+            "projectName": "Innotrust",
+            "args": ""
+        }
+    ]
+}
