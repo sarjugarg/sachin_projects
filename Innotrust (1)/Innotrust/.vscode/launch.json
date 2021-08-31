@@ -2,6 +2,83 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch MyClass",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.util.MyClass",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch NullArgsCall",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.util.NullArgsCall",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.util.test",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch Test",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.service.Test",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch TestThrowAndThrows",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.service.TestThrowAndThrows",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch HttpURLConnectionExample",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.HttpURLConnectionExample",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch aa",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.aa",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch ttt",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.ttt",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch test",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.test",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch XXTest",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.XXTest",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
+            "name": "Launch Tester",
+            "request": "launch",
+            "mainClass": "com.giftingnetwork.api.Tester",
+            "projectName": "Innotrust"
+        },
+        {
+            "type": "java",
             "name": "Launch ImageComparision",
             "request": "launch",
             "mainClass": "com.giftingnetwork.api.ImageComparision",
@@ -83,6 +160,16 @@
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "mainClass": "com.giftingnetwork.api.TwoWaySerialComm",
+            "projectName": "Innotrust",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BootApplication<Innotrust>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.giftingnetwork.BootApplication",
             "projectName": "Innotrust",
             "args": ""
         }
