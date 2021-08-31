@@ -694,7 +694,7 @@ public class HexFileReader {
                     }
 
                } catch (Exception e) {
-                    logger.error("MandatoryExcept  " + l.getClassName() + "/" + l.getMethodName() + ":" + l.getLineNumber() + e);
+                    logger.info("Mandatory  " + l.getClassName() + "/" + l.getMethodName() + ":" + l.getLineNumber() );
                }
 
                br.close();
