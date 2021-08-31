@@ -1,9 +1,7 @@
 package com.giftingnetwork.repo;
 
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.Collection;
-import java.util.Collections;
+import java.sql.ResultSetMetaData; 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,7 +30,7 @@ import org.slf4j.LoggerFactory;
 @Service
 public class LoginRepository {
 
-  //  Logger // logger = LoggerFactory.getLogger(LoginRepository.class);
+    Logger   logger = LoggerFactory.getLogger(LoginRepository.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -51,17 +49,17 @@ public class LoginRepository {
             String query = " select count(username)  from auth_user  inner join contact on  contact.auth_user_id  = auth_user.auth_user_id  inner join contact_type_contact on contact.contact_id =contact_type_contact.contact_id  inner join contact_type on  contact_type_contact.contact_type_id =contact_type.contact_type_id   where   contact_type.contact_type = 'Api User'     and  auth_user.username=  '"
                     + genericModel.getUsername() + "'  and  auth_user.password = '" + genericModel.getPassword()
                     + "'         ";
-            // logger.info("[" + query + "] ");
+            logger.info("[" + query + "] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 String data = "";
                 while (rs.next()) {
-                    // logger.info(" AuthUser authentication result Value " + rs.getString(1));
+                    logger.info(" AuthUser authentication result Value " + rs.getString(1));
                     data = rs.getString(1).equals("1") ? "true" : "false";
                 }
                 return data;
             });
         } catch (Exception e) {
-            // logger.error("Error " + e);
+            logger.error("Error " + e);
             return "false";
             // return xmlDomHandler.genericErrorMethod("LoginError", "Internal Error");
         }
@@ -72,12 +70,12 @@ public class LoginRepository {
         deleteFromTokenDbByUserNamePassWord(sessionId, clientID, username, password);
         try {
             String query = " insert into token_db_mapping  ( token_id , client_id ,username , password   ,clientIp ,refresh_token  ,refresh_token_expire_time ,  token_id_expire_time,  init_time  )   values (  ? , ? , ? , ? ,  ?, ? ,? ,?  ,now()   ) ";
-            // logger.info("[" + query + "]");
+            logger.info("[" + query + "]");
             jdbcTemplate.update(query, new Object[] { sessionId, clientID, username, password, userIp, refresh_token,
                     refresh_token_timeout, session_token_timeout });
             return true;
         } catch (Exception e) {
-            // logger.error(e.getMessage());
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -86,11 +84,11 @@ public class LoginRepository {
             String password) {
         try {
             String query = " delete from token_db_mapping  where username  = ?  ";
-            // logger.info("[" + query + "]");
+            logger.info("[" + query + "]");
             jdbcTemplate.update(query, new Object[] { username });
             return true;
         } catch (Exception e) {
-            // logger.error(e.getMessage());
+            logger.error(e.getMessage());
             return false;
         }
 
@@ -100,11 +98,11 @@ public class LoginRepository {
         try {
             sessionId = sessionId.substring(7);
             String query = " delete from token_db_mapping  where token_id  = ? ";
-            // logger.info("[" + query + "]");
+            logger.info("[" + query + "]");
             jdbcTemplate.update(query, new Object[] { sessionId });
             return true;
         } catch (Exception e) {
-            // logger.error(e.getMessage());
+            logger.error(e.getMessage());
             return false;
         }
     }
@@ -112,19 +110,18 @@ public class LoginRepository {
     public Boolean deleteByUserNamePassword(String username, String password) {
         try {
             String query = " delete from token_db_mapping  where username   = ?  and password = ? ";
-            // logger.info("[" + query + "]");
+            logger.info("[" + query + "]");
             jdbcTemplate.update(query, new Object[] { username, password });
             return true;
         } catch (Exception e) {
-            // logger.error(e.getMessage());
+            logger.error(e.getMessage());
             return false;
         }
     }
 
     public String getExtendedQueryFromDB(String api_name, String parent) {
         try {
-            // logger.info(" select mapped_tables_values from api_table_mapping where api_name=  '" + api_name
-                   // + "' and parent =  '" + parent + "' ");
+            
             return jdbcTemplate.query(" select mapped_tables_values from api_table_mapping where api_name=  '"
                     + api_name + "' and parent =  '" + parent + "' ", (ResultSet rs) -> {
                         String data = "";
@@ -134,7 +131,7 @@ public class LoginRepository {
                         return data;
                     });
         } catch (Exception e) {
-            // logger.error("Error " + e);
+            logger.error("Error " + e);
             return "false";
         }
     }
@@ -144,7 +141,7 @@ public class LoginRepository {
             String query = " SELECT parameter_name, table_name, child   FROM api_parent_child_object_mapping WHERE api_name =  '"
                     + apiName + "' and  parent = '" + parent
                     + "'  and     sub_child_exist = 'N'    order by show_order     ";
-            // // logger.info(" [" + query + " ] ");
+            // logger.info(" [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 String value = " ";
                 while (rs.next()) {
@@ -154,7 +151,7 @@ public class LoginRepository {
                 return value;
             });
         } catch (Exception e) {
-            // logger.error("  Error " + e);
+            logger.error("  Error " + e);
             return "false";
         }
     }
@@ -163,7 +160,7 @@ public class LoginRepository {
         try {
             String query = " SELECT parameter_name, table_name, child  , parent   FROM api_parent_child_object_mapping WHERE api_name =  '"
                     + apiName + "'  and  parent = '" + apiName + "' and  sub_child_exist = 'N'    order by id     ";
-            // logger.info(" [" + query + " ] ");
+            logger.info(" [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 String value = " ";
                 while (rs.next()) {
@@ -173,7 +170,7 @@ public class LoginRepository {
                 return value;
             });
         } catch (Exception e) {
-            // logger.error("Error " + e);
+            logger.error("Error " + e);
             return "false";
         }
     }
@@ -182,7 +179,7 @@ public class LoginRepository {
         try {
             query = query.substring(0,
                     (query.contains("ORDER") ? query.indexOf("ORDER") + 0 : query.indexOf("LIMIT") + 0));
-            // logger.info(" [" + query + " ] ");
+            logger.info(" [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 int rowValue = 0;
                 while (rs.next()) {
@@ -191,7 +188,7 @@ public class LoginRepository {
                 return String.valueOf(rowValue);
             });
         } catch (Exception e) {
-            // logger.error("Error " + e);
+            logger.error("Error " + e);
             return "false";
         }
     }
@@ -203,7 +200,7 @@ public class LoginRepository {
                 BootApplication.LoginSessionTimeOut = rs.getObject("param_value").toString();
             });
         } catch (Exception e) {
-            // logger.error("Error " + e.getMessage());
+            logger.error("Error " + e.getMessage());
         }
     }
 
@@ -211,7 +208,7 @@ public class LoginRepository {
         try {
             String query = " select  refresh_token_expire_time from token_db_mapping   where refresh_token_expire_time > now() and  refresh_token  = '"
                     + refresh_token + "'  ";
-            // logger.info("  [" + query + " ] ");
+            logger.info("  [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 Date value = null;
                 while (rs.next()) {
@@ -221,7 +218,7 @@ public class LoginRepository {
             });
 
         } catch (Exception e) {
-            // logger.error("Error " + e.getMessage());
+            logger.error("Error " + e.getMessage());
             return null;
         }
 
@@ -231,7 +228,7 @@ public class LoginRepository {
         {
             try {
                 String query = " delete from token_db_mapping  where refresh_token  = ? ";
-                // logger.info("[" + query + "]");
+                logger.info("[" + query + "]");
                 int i = jdbcTemplate.update(query, new Object[] { accessToken });
                 if (i > 0) {
                     return true;
@@ -239,7 +236,7 @@ public class LoginRepository {
                     return false;
                 }
             } catch (Exception e) {
-                // logger.error(e.getMessage());
+                logger.error(e.getMessage());
                 return false;
             }
         }
@@ -249,7 +246,7 @@ public class LoginRepository {
     public ResultSet getParentChildMapping(String apiName) {
         String query = "  select parent , array_agg( child) as child , sub_child_exist from public.api_parent_child_object_mapping  where api_name = '"
                 + apiName + "'  group by parent ,sub_child_exist ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rs) -> {
             return rs;
         });
@@ -259,7 +256,7 @@ public class LoginRepository {
         Map<String, String> map = new HashMap<String, String>();
         String query = "select a.parent , array_agg( a.child) as child , a.sub_child_exist from  ( select parent ,child,sub_child_exist from  api_parent_child_object_mapping  where api_name = '"
                 + apiName + "'  order by show_order ) a  group by a.parent ,a.sub_child_exist ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             while (rset.next()) {
                 if (rset.getString("sub_child_exist").equals("N")) {
@@ -275,7 +272,7 @@ public class LoginRepository {
 
         String query = "select   a.parent , array_agg( a.child) as child , a.sub_child_exist from  ( select parent ,child,sub_child_exist from  api_parent_child_object_mapping  where api_name = '"
                 + apiName + "'  order by show_order ) a  group by a.parent ,a.sub_child_exist ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             while (rset.next()) {
                 if (rset.getString("sub_child_exist").equals("Y")) {
@@ -289,48 +286,48 @@ public class LoginRepository {
     public void setDefaultPageSizeConfiguration() {
         try {
             String query = " select config_param , param_value  from config  where config_param = 'DEFAULT_PAGE_SIZE'  ";
-            // logger.info("  [" + query + " ] " + jdbcTemplate);
+            logger.info("  [" + query + " ] " + jdbcTemplate);
             jdbcTemplate.query(query, (ResultSet rs) -> {
                 BootApplication.DefaultPageSize = rs.getObject("param_value").toString();
                 while (rs.next()) {
                     BootApplication.DefaultPageSize = rs.getString("param_value");
                 }
             });
-            // logger.info("  default Page size  :  " + BootApplication.DefaultPageSize);
+            logger.info("  default Page size  :  " + BootApplication.DefaultPageSize);
         } catch (Exception e) {
-            // logger.error("  Error " + e.getMessage());
+            logger.error("  Error " + e.getMessage());
         }
     }
 
     public void setDefaultMinPageSizeConfiguration() {
         try {
             String query = " select config_param , param_value  from config  where config_param = 'MANIMUM_PAGE_SIZE'  ";
-            // logger.info("  [" + query + " ] " + jdbcTemplate);
+            logger.info("  [" + query + " ] " + jdbcTemplate);
             jdbcTemplate.query(query, (ResultSet rs) -> {
                 BootApplication.DefaultMinPageSize = rs.getObject("param_value").toString();
                 while (rs.next()) {
                     BootApplication.DefaultMinPageSize = rs.getString("param_value");
                 }
             });
-            // logger.info("  Manimum Page size  :  " + BootApplication.DefaultMinPageSize);
+            logger.info("  Manimum Page size  :  " + BootApplication.DefaultMinPageSize);
         } catch (Exception e) {
-            // logger.error("  Error " + e.getMessage());
+            logger.error("  Error " + e.getMessage());
         }
     }
 
     public void setDefaultMaxPageSizeConfiguration() {
         try {
             String query = " select config_param , param_value  from config  where config_param = 'MAXIMUM_PAGE_SIZE'  ";
-            // logger.info("  [" + query + " ] " + jdbcTemplate);
+            logger.info("  [" + query + " ] " + jdbcTemplate);
             jdbcTemplate.query(query, (ResultSet rs) -> {
                 BootApplication.DefaultMaxPageSize = rs.getObject("param_value").toString();
                 while (rs.next()) {
                     BootApplication.DefaultMaxPageSize = rs.getString("param_value");
                 }
             });
-            // logger.info("  Maximum Page size  :  " + BootApplication.DefaultMaxPageSize);
+            logger.info("  Maximum Page size  :  " + BootApplication.DefaultMaxPageSize);
         } catch (Exception e) {
-            // logger.error("  Error " + e.getMessage());
+            logger.error("  Error " + e.getMessage());
         }
     }
 
@@ -338,7 +335,7 @@ public class LoginRepository {
         try {
             String query = " SELECT parameter_name,table_name, child   FROM api_parent_child_object_mapping WHERE api_name =  '"
                     + apiName + "' and searchable = 'Y'  and sub_child_exist = 'N'   ";
-            // logger.info(" [" + query + " ] ");
+            logger.info(" [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 Map<String, String> map = new HashMap<String, String>();
                 while (rs.next()) {
@@ -347,7 +344,7 @@ public class LoginRepository {
                 return map;
             });
         } catch (Exception e) {
-            // logger.error("Error " + e);
+            logger.error("Error " + e);
             return null;
         }
     }
@@ -355,18 +352,18 @@ public class LoginRepository {
     public String getIdNameByApiFromDb(String apiName) {
         try {
             String query = "  select param_value from config where  config_param = '" + apiName + "'  ";
-            // logger.info("  [" + query + " ] ");
+            logger.info("  [" + query + " ] ");
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 String value = null;
                 while (rs.next()) {
-                    // logger.info("Param Name  " + rs.getObject(1).toString());
+                    logger.info("Param Name  " + rs.getObject(1).toString());
                     value = rs.getObject(1).toString();
                 }
                 return value;
             });
 
         } catch (Exception e) {
-            // logger.error("Error " + e.getMessage());
+            logger.error("Error " + e.getMessage());
             return null;
         }
     }
@@ -374,14 +371,14 @@ public class LoginRepository {
     public JSONObject getDynamicValuesForFund(JSONObject funddata, String statement_id) {
         try {
             String query = " select * from fund_statement where fund_statement_id = " + statement_id;
-            // logger.info(" [" + query + " ] ");
+            logger.info(" [" + query + " ] ");
             JSONObject funddata1 = new JSONObject();
             TreeMap<String, String> sorted = new TreeMap<>();
             return jdbcTemplate.query(query, (ResultSet rs) -> {
                 ResultSetMetaData rsmd = rs.getMetaData();
                 int numColumns = rsmd.getColumnCount();
                 while (rs.next()) {
-                    // logger.info(" rsmd  Count " + numColumns);
+                    logger.info(" rsmd  Count " + numColumns);
                     for (int i = 1; i <= numColumns; i++) {
                         if (rsmd.getColumnName(i).startsWith("fund_") && rs.getObject(i) != null
                                 && Character.isDigit(rsmd.getColumnName(i).charAt(5))) {
@@ -395,7 +392,7 @@ public class LoginRepository {
                 return funddata1;
             });
         } catch (Exception e) {
-            // logger.error(e.getMessage() + "Error " + e.getLocalizedMessage());
+            logger.error(e.getMessage() + "Error " + e.getLocalizedMessage());
             return null;
         }
     }
@@ -404,7 +401,7 @@ public class LoginRepository {
         Map<String, String> map = new HashMap<String, String>();
         String query = " select  child , prop_type  from api_parent_child_object_mapping where  api_name = '" + apiName
                 + "'    and  prop_type is not null ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             while (rset.next()) {
                 map.put(rset.getString("child"), rset.getString("prop_type"));
@@ -425,7 +422,7 @@ public class LoginRepository {
         // + getExtendedQueryFromDB(apiName, header); // get main Table
 
         String query = apiObjectQueries.get(header).replace("?", " '" + id + "' ");
-        // // logger.info("Query ::" + query);
+        // logger.info("Query ::" + query);
         // String childName = childSubChildMap.containsKey(header) ?
         // childSubChildMap.get(header) : null;
 
@@ -435,7 +432,7 @@ public class LoginRepository {
         return jdbcTemplate.query(query, (ResultSet rs) -> {
             ResultSetMetaData rsmd = rs.getMetaData();
             int numColumns = rsmd.getColumnCount();
-            // // logger.info(" Column count " + numColumns);
+            // logger.info(" Column count " + numColumns);
             int i = 0;
             while (rs.next()) {
 
@@ -446,11 +443,11 @@ public class LoginRepository {
                     changeMap.set(apiValues, new LinkedHashMap<>());
                     changeMap.setAccessible(false);
                 } catch (IllegalAccessException | NoSuchFieldException e) {
-                    // logger.error(e.getMessage());
+                    logger.error(e.getMessage());
                 }
                 for (int l = 1; l <= numColumns; l++) {
                     try {
-                        // logger.info(rsmd.getColumnName(l) + "  " + rsmd.getColumnType(l));
+                        logger.info(rsmd.getColumnName(l) + "  " + rsmd.getColumnType(l));
                         apiValues.put(rsmd.getColumnName(l), rs.getObject(l) == null ? " "
                                 : rsmd.getColumnType(l) == 93 ? new SimpleDateFormat("MM-dd-yyyy").format(
                                         new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(rs.getObject(l).toString()))
@@ -464,7 +461,7 @@ public class LoginRepository {
                     }
                 }
 
-                // // logger.info(" Response " + apiValues.toString());
+                // logger.info(" Response " + apiValues.toString());
 
                 if (childName != null) { // get child having header as orga etc
                     JSONObject l3Object = new JSONObject();
@@ -474,23 +471,23 @@ public class LoginRepository {
                         changeMap.set(l3Object, new LinkedHashMap<>());
                         changeMap.setAccessible(false);
                     } catch (IllegalAccessException | NoSuchFieldException e) {
-                        // logger.info(e.getMessage());
+                        logger.info(e.getMessage());
                     }
                     l3Object = getSingleRecordObj(apiName, childName, id);
-                    // // logger.info("Response ::: " + l3Object.toString());
+                    // logger.info("Response ::: " + l3Object.toString());
                     for (String key : JSONObject.getNames(l3Object)) {
                         Object value = l3Object.get(key);
-                        // logger.info(" " + key);
+                        logger.info(" " + key);
                         if (!apiValues.has(key)) {
                             apiValues.put(key, value);
                         }
                     }
-                    // // logger.info(" Response " + apiValues.toString());
+                    // logger.info(" Response " + apiValues.toString());
                 }
                 jsonArr.put(apiValues);
                 i++;
             }
-            // // logger.info(" Values of i " + i);
+            // logger.info(" Values of i " + i);
             JSONObject apiValuesSingle = new JSONObject();
 
             if (i == 0) {
@@ -500,16 +497,16 @@ public class LoginRepository {
                     changeMap.set(apiValuesSingle, new LinkedHashMap<>());
                     changeMap.setAccessible(false);
                 } catch (IllegalAccessException | NoSuchFieldException e) {
-                    // logger.info(e.getMessage());
+                    logger.info(e.getMessage());
                 }
                 for (int l = 1; l <= numColumns; l++) {
-                    // // logger.info(" " + rsmd.getColumnName(l));
+                    // logger.info(" " + rsmd.getColumnName(l));
                     apiValuesSingle.put(rsmd.getColumnName(l), " ");
                 }
-                // // logger.info("Response L2 " + apiValuesSingle.toString());
+                // logger.info("Response L2 " + apiValuesSingle.toString());
 
                 if (childName != null) {
-                    // logger.info("Going to Get   " + childName + " Values ");
+                    logger.info("Going to Get   " + childName + " Values ");
                     JSONObject l3Object = new JSONObject();
                     try {
                         Field changeMap = l3Object.getClass().getDeclaredField("map");
@@ -517,29 +514,29 @@ public class LoginRepository {
                         changeMap.set(l3Object, new LinkedHashMap<>());
                         changeMap.setAccessible(false);
                     } catch (IllegalAccessException | NoSuchFieldException e) {
-                        // logger.error(e.getMessage());
+                        logger.error(e.getMessage());
                     }
                     l3Object = getSingleRecordObj(apiName, childName, id);
-                    // // logger.info(" Response L3 " + l3Object.toString());
+                    // logger.info(" Response L3 " + l3Object.toString());
                     for (String key : JSONObject.getNames(l3Object)) {
                         Object value = l3Object.get(key);
-                        // logger.info(" " + key);
+                        logger.info(" " + key);
                         if (!apiValuesSingle.has(key)) {
                             apiValuesSingle.put(key, value);
                         }
                     }
-                    // // logger.info(" Response " + apiValuesSingle.toString());
+                    // logger.info(" Response " + apiValuesSingle.toString());
                 }
                 jsonArr.put(apiValuesSingle);
             }
-            // logger.info(jsonArr.toString());
+            logger.info(jsonArr.toString());
             JSONObject jsn = new JSONObject();
-            // logger.info(" Required Value  " + i);
+            logger.info(" Required Value  " + i);
             if (i == 0) {
-                // // logger.info(" Response " + header + " :: " + apiValuesSingle);
+                // logger.info(" Response " + header + " :: " + apiValuesSingle);
                 jsn.put(header, apiValuesSingle);
             } else if (i == 1) {
-                // // logger.info(" Response " + header + " :: " + jsonArr.getJSONObject(0));
+                // logger.info(" Response " + header + " :: " + jsonArr.getJSONObject(0));
 
                 jsn.put(header, jsonArr.getJSONObject(0));
             } else {
@@ -554,7 +551,7 @@ public class LoginRepository {
         scopesController.setDBName("localDb");
         String query = " select  distinct child  from api_parent_child_object_mapping where api_name = '" + apiName
                 + "' and parent = '" + header + "' and sub_child_exist = 'Y'   ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             String data = null;
             while (rset.next()) {
@@ -573,7 +570,7 @@ public class LoginRepository {
                 + genericFunctions.removeLastChars(getParammeterValuesFromApiTable1(map, apiName, header), 1) + " "
                 + getExtendedQueryFromDB(apiName, header); // get main Table
         query = query.replace("?", " '" + id + "' ");
-        // // logger.info("Query ::" + query);
+        // logger.info("Query ::" + query);
         scopesController.setDBName(dbName);
         JSONObject apiValues = new JSONObject();
         try {
@@ -582,13 +579,13 @@ public class LoginRepository {
             changeMap.set(apiValues, new LinkedHashMap<>());
             changeMap.setAccessible(false);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            // logger.error(e.getMessage());
+            logger.error(e.getMessage());
         }
         JSONObject apitmp = new JSONObject();
         return jdbcTemplate.query(query, (ResultSet rs) -> {
             ResultSetMetaData rsmd = rs.getMetaData();
             int numColumns = rsmd.getColumnCount();
-            // // logger.info(" Column count " + numColumns);
+            // logger.info(" Column count " + numColumns);
             while (rs.next()) {
                 for (int l = 1; l <= numColumns; l++) {
                     apiValues.put(rsmd.getColumnName(l), rs.getObject(l) == null ? " " : rs.getObject(l).toString());
@@ -603,7 +600,7 @@ public class LoginRepository {
         String query = "  select mapped_tables_values from api_table_mapping where api_name = '" + apiName
                 + "' and parent = (  select  concat (parent, '_addition' )  from api_parent_child_object_mapping  where api_name = '"
                 + apiName + "' and  parameter_name = '" + filterName + "'  and searchable ='Y'  )  ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             String data = null;
             while (rset.next()) {
@@ -617,7 +614,7 @@ public class LoginRepository {
             Map<String, String> childSubChildMap) {
         String query = "select a.parent , array_agg( a.child) as child , a.sub_child_exist from  ( select parent ,child,sub_child_exist from  api_parent_child_object_mapping  where api_name = '"
                 + apiName + "'  order by show_order ) a  group by a.parent ,a.sub_child_exist ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         Map<String, String> map = new HashMap<>();
         return jdbcTemplate.query(query, (ResultSet rs) -> {
             String data = null;
@@ -654,7 +651,7 @@ public class LoginRepository {
     public String getColumnNameByParent(String apiName, String parameter_name) {
         String query = "    select   table_name , child   from api_parent_child_object_mapping  where api_name = '"
                 + apiName + "' and   parameter_name  = '" + parameter_name + "'   ";
-        // logger.info("  [" + query + " ] ");
+        logger.info("  [" + query + " ] ");
         return jdbcTemplate.query(query, (ResultSet rset) -> {
             String data = null;
             while (rset.next()) {

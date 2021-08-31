@@ -165,24 +165,16 @@ public class RecommendationService {
                     genericModel.setErrorTitle(filterName.substring(9, filterName.length() - 1) + " not correct");
                     xmlDomHandler.generateErrorXml1(genericModel);
                     return genericModel.getResult();
-                    // return xmlDomHandler.genericErrorMethod("client
-                    // error",filterName.substring(9, filterName.length() - 1) + " not correct");
-                }
+                 }
                 orderByQuery += filterName.substring(9, filterName.length() - 1) + " " + filterValue + " ,";
-                // String FieldName =
-                // loginRepository.getColumnNameWithParameters(genericModel.getApiName(),
-                // filterName.substring(9, filterName.length() - 1));
-                String FieldName = apiColumnMap.get(filterName.substring(9, filterName.length() - 1));
+                 String FieldName = apiColumnMap.get(filterName.substring(9, filterName.length() - 1));
                 orderBy += FieldName + " " + filterValue + " ,";
             }
         }
 
         whereQuery = genericFunctions.removeLastChars(whereQuery, 7);
-
         orderBy = genericFunctions.removeLastChars(orderBy, 1);
-
         // orderByQuery = GenericFunctions.removeLastChars(orderByQuery, 1);
-        // logger.info("orderByQuery Query [] : " + orderByQuery);
         genericModel.setSorting("");
         query += additionQuery;
         query += whereQuery;

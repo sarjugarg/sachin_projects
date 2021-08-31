@@ -37,7 +37,7 @@ public class JavaJsonEncoderNew2 {
     @Autowired
     GenericFunctions genericFunctions;
 
-    // Logger // logger = LoggerFactory.getLogger(JavaJsonEncoderNew2.class);
+      Logger  logger = LoggerFactory.getLogger(JavaJsonEncoderNew2.class);
 
     Map<String, String> parentChildmap = new LinkedHashMap<String, String>();;
     Map<String, String> childSubChildMap = new LinkedHashMap<String, String>();
@@ -50,9 +50,7 @@ public class JavaJsonEncoderNew2 {
 
     public String toDocument(ResultSet rs,   String query, GenericModel genericModel) {
         try {
-            LocalDateTime localDateTime = LocalDateTime.now();
-            // logger.info("End  Time " +  localDateTime);
-            // logger.info("Json Encoder Start:   [ " + query + " ]");
+               logger.info("Json Encoder Start:   [ " + query + " ]");
             String totalCount = loginRepository.getTotalCountFromDb(query);
             if (query.contains("ORDER")) {
                 query.substring(query.indexOf("ORDER BY") + 9, query.indexOf("LIMIT") + 0).trim();
@@ -64,21 +62,10 @@ public class JavaJsonEncoderNew2 {
             String Offset = query.substring(query.indexOf("OFFSET") + 6, query.indexOf("OFFSET") + 11);
             String limit = query.substring(query.indexOf("LIMIT") + 5, query.indexOf("LIMIT") + 9);
             int pageSize = ((Integer.parseInt(Offset.trim()) / Integer.parseInt(limit.trim())) + 1);
-            // parentChildmap = loginRepository.getParentMapping(apiName);
-         //   childSubChildMap = loginRepository.getChildMapping(apiName);
-            propertyTypeMapValues = loginRepository.propertyTypeMapValues(apiName);
+             propertyTypeMapValues = loginRepository.propertyTypeMapValues(apiName);
             loginRepository.apiObjectValueDetails(apiName, parentChildmap, childSubChildMap);
             loginRepository.getObjectQueries(apiName, parentChildmap, apiObjectQueries);
-            // for (Map.Entry<String, String> entry : parentChildmap.entrySet()) {
-            //     // logger.info(" PARENT : Key = " + entry.getKey() + " Value = " + entry.getValue());
-            // }
-            // for (Map.Entry<String, String> entry : childSubChildMap.entrySet()) {
-            //     // logger.info(" CHILD : Key = " + entry.getKey() + " Value = " + entry.getValue());
-            // }
-            // for (Map.Entry<String, String> entry : apiObjectQueries.entrySet()) {
-            //     // logger.info(" Queries for header = " + entry.getKey() + "  ; Values = " + entry.getValue());
-         //   }
-
+     
             ResultSetMetaData rsmd = rs.getMetaData();
             int numColumns = rsmd.getColumnCount();
              int tentativeCount = 0;
@@ -92,7 +79,7 @@ public class JavaJsonEncoderNew2 {
                 for (Map.Entry<String, String> entry : columnNameValuesMap.entrySet()) {
                     // // logger.info(" Columns : Key = " + entry.getKey() + " Value =" +
                     // entry.getValue() + ";");
-                    if (propertyTypeMapValues.containsKey(entry.getKey())) { //// Properties Fromat Changes
+                    if (propertyTypeMapValues.containsKey(entry.getKey())) {  
                         // // logger.info(" column " + entry.getKey());
                         try {
                             if (propertyTypeMapValues.get(entry.getKey()).equals("M")) {
@@ -102,26 +89,25 @@ public class JavaJsonEncoderNew2 {
                             if (propertyTypeMapValues.get(entry.getKey()).equals("T")) {
                                 newValue = new SimpleDateFormat("MM-dd-yyyy")
                                         .format(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(entry.getValue()));
-                                // // logger.info(" Changes For TimeStamp Key = " + entry.getKey() + " Value = " +
-                                // newDate);
+                               
                             }
                             if (propertyTypeMapValues.get(entry.getKey()).equals("D")) {
                                 newValue = new SimpleDateFormat("MM-dd-yyyy")
                                         .format(new SimpleDateFormat("yyyy-MM-dd").parse(entry.getValue()));
                             }
                             if (propertyTypeMapValues.get(entry.getKey()).equals("TX")) {
-                            //    // logger.info(" Changes For Date Key = " + entry.getKey() + "  ");
+                             logger.info(" Changes For Date Key = " + entry.getKey() + "  ");
                                 newValue = entry.getValue().toString().replace("/", "-");
                             }
                             if (propertyTypeMapValues.get(entry.getKey()).equals("A")) {
-                              //  // logger.info(entry.getKey() + " NewValue Key " + entry.getValue());
+                               logger.info(entry.getKey() + " NewValue Key " + entry.getValue());
                                 newValue = new DecimalFormat("#,###,##0.00").format(Double.valueOf(entry.getValue()));
-                             //   // logger.info("NewValue Key = " + entry.getKey() + " Value = " + newValue);
+                               logger.info("NewValue Key = " + entry.getKey() + " Value = " + newValue);
                             }
 
                             columnNameValuesMap.replace(entry.getKey(), newValue);
                         } catch (Exception e) {
-                            // logger.error("Not parsable:" + e.getMessage() + " for : " + entry.getKey());
+                              logger.error("Not parsable:" + e.getMessage() + " for : " + entry.getKey());
                         }
                     }
                 }
@@ -190,13 +176,12 @@ public class JavaJsonEncoderNew2 {
             changeMap.set(apiValues2, new LinkedHashMap<>());
             changeMap.setAccessible(false);
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            // logger.error(e.getMessage());
+             logger.error(e.getMessage());
         }
         if (apiName.equals(header)) {
             String[] parentArry = (parentChildmap.containsKey(header)) ? parentChildmap.get(header).split(",") : null;
             for (int j = 0; j < parentArry.length; j++) {
-               //   // logger.info(" !!!! " + parentArry[j] + " values " +
-               //  columnNameValuesMap.get(parentArry[j]));
+              
                 apiValues2.put(parentArry[j], columnNameValuesMap.get(parentArry[j]));
             }
             if (apiName.equals("fund-statement")) {
@@ -205,10 +190,10 @@ public class JavaJsonEncoderNew2 {
         }
         String[] childArr = (childSubChildMap.containsKey(header)  ) ? childSubChildMap.get(header).split(",")
                 : new String[0] ;
-       //   // logger.info("Fetching New Object With Multiple Details " +  childArr.length );
+        logger.info("Fetching New Object With Multiple Details " +  childArr.length );
         
           for (int i = 0; i < childArr.length; i++) {
-        //    // logger.info("  Going to  fetch next Details  " + childArr[i] );
+         logger.info("  Going to  fetch next Details  " + childArr[i] );
             header = childArr[i];
             JSONObject apiValues3 = new JSONObject();
             try {
@@ -217,7 +202,7 @@ public class JavaJsonEncoderNew2 {
                 changeMap.set(apiValues3, new LinkedHashMap<>());
                 changeMap.setAccessible(false);
             } catch (IllegalAccessException | NoSuchFieldException e) {
-                // logger.error(e.getMessage());
+                 logger.error(e.getMessage());
             }
             apiValues3 = loginRepository.getRecordsFromDb(apiName, header, apiId, childSubChildMap, apiObjectQueries  );
             for (String key : JSONObject.getNames(apiValues3)) {

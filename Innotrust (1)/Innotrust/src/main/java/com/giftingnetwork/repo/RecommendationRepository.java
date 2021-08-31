@@ -42,17 +42,17 @@ public class RecommendationRepository {
   @Autowired
   LoginRepository loginRepository;
  
-   //  Logger logger = LoggerFactory.getLogger(RecommendationRepository.class);
+   Logger logger = LoggerFactory.getLogger(RecommendationRepository.class);
 
   public String getXmlFromQuery(  String query,   GenericModel genericModel) {
      try {
       LocalDateTime localDateTime = LocalDateTime.now();
-       // logger.info("Start  Time " +  localDateTime);
+       logger.info("Start  Time " +  localDateTime);
       return jdbcTemplate.query(query, (ResultSet rs) -> {
         return javaJsonEncoder2.toDocument (  rs,   query  ,  genericModel );
       });
      } catch (Exception e) {
-      // logger.error(e.getCause() + " :error: " + e.getMessage());
+      logger.error(e.getCause() + " :error: " + e.getMessage());
       genericModel.setErrorDetail("server Error");
       genericModel.setErrorTitle("internal Error");
       genericModel.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,10 +65,10 @@ public class RecommendationRepository {
     try {
       scopesController.setDBName("localDb");
       String query = " insert into audit_db  ( date, username, token, client_id ,api_name  ,api_paramater , output_status_code  )  values ( now() , '"+genericModel.getUsername()+ "'  , '"+ genericModel.getAuthorization()+ "' ,  '"+genericModel.getClientId()+ "' ,  '"+genericModel.getApiName()+ "' ,  '"+genericModel.getQueryString()+ "',  '"+genericModel.getHttpStatus().value()+ "' ) ";
-      // logger.info("[" + query + "]"  );
+      logger.info("[" + query + "]"  );
        jdbcTemplate.update(query,new Object[] {});
             } catch (Exception e) {
-      // logger.error(e.getMessage()  + "," + e.getLocalizedMessage());
+      logger.error(e.getMessage()  + "," + e.getLocalizedMessage());
     }
 
   }
@@ -80,34 +80,34 @@ public class RecommendationRepository {
     try {
       genericModel.setErrorTitle("unauthorized access");
       if (!genericModel.getAuthorization().startsWith("Bearer ")) {
-        // logger.info("Bearer Not found in accessToken " + genericModel.getAuthorization());
+        logger.info("Bearer Not found in accessToken " + genericModel.getAuthorization());
         return genericModel;
       }
       String sessionId = genericModel.getAuthorization().substring(7);
       scopesController.setDBName("localDb");
       String QueryString = "select client_id, token_id_expire_time , username , password  from token_db_mapping where token_id  = '"
           + sessionId + "' ";
-      // logger.info(QueryString);
+      logger.info(QueryString);
       return jdbcTemplate.query(QueryString, (ResultSet rs) -> {
         while (rs.next()) {
-          // logger.info("Token Expire Time: " + rs.getString("token_id_expire_time"));
+          logger.info("Token Expire Time: " + rs.getString("token_id_expire_time"));
           DateFormat formatter = new SimpleDateFormat("yy-MM-dd HH:mm:ss");
           Date d = null;
           try {
             d = formatter.parse(rs.getObject("token_id_expire_time").toString());
           } catch (Exception e) {
-            // logger.error("  Error " + e);
+            logger.error("  Error " + e);
           }
           Calendar cal = Calendar.getInstance();
           cal.setTime(d);
           Date date = java.util.Calendar.getInstance().getTime();
-          // logger.info("Token Expire Time  after  : " + cal.getTime() + " . Current Time : " + date + " ");
+          logger.info("Token Expire Time  after  : " + cal.getTime() + " . Current Time : " + date + " ");
           if (cal.getTime().before(date)) {
-            // logger.info(" Session Time out for  " + rs.getString("username"));
+            logger.info(" Session Time out for  " + rs.getString("username"));
             loginRepository.deleteByUserNamePassword(rs.getString("username"), rs.getString("password"));
             genericModel.setErrorTitle("session time out");
           } else {
-            // logger.info("Session Going for " + rs.getString("username") + " ClientId " + rs.getString("client_id"));
+            logger.info("Session Going for " + rs.getString("username") + " ClientId " + rs.getString("client_id"));
             genericModel.setClientId(rs.getString("client_id"));
             genericModel.setUsername(rs.getString("username"));
             scopesController.setDBName(rs.getString("client_id"));
@@ -117,7 +117,7 @@ public class RecommendationRepository {
         return genericModel;
       });
     } catch (Exception e) {
-      // logger.error(e.getMessage());
+      logger.error(e.getMessage());
       genericModel.setErrorTitle("unauthorized access");
       return genericModel;
     }
@@ -135,10 +135,10 @@ public class RecommendationRepository {
       String query = "  update token_db_mapping  set refresh_token_expire_time = ( now()  +  INTERVAL '" + mins
           + " MINUTE' )  ,   token_id_expire_time = ( now()  +  INTERVAL '" + mins
           + " MINUTE' )   where token_id =    '" + authorization + "'";
-      // logger.info("[" + query + "]");
+      logger.info("[" + query + "]");
       jdbcTemplate.update(query, new Object[] {});
     } catch (Exception e) {
-      // logger.error(e.getMessage());
+      logger.error(e.getMessage());
     }
   }
 
