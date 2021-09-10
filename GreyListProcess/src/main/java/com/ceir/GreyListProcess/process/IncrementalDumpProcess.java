@@ -144,14 +144,14 @@ public class IncrementalDumpProcess {
 				currentTime=utility.getTxnId();
 				log.info("day added + "+DayAdded);
 				log.info("days: "+days);
-                int daysSubtract=frequencyDays-1;
-                endDate=utility.addDaysInDate(daysSubtract,startDate);
+                                int daysSubtract=frequencyDays-1;
+                                endDate=utility.addDaysInDate(daysSubtract,startDate);
 				log.info("day added date:  "+endDate);
 				FileDumpFilter filter=new FileDumpFilter();
 				filter.setStartDate(utility.convertToDateformat(startDate));
 				filter.setEndDate(endDate);
 				yesterdayId=utility.getYesterdayId();
-				log.info("fetch data from greylist db between dates : "+startDate +"to "+ startDate);
+				log.info("fetch data from greylist db  history between dates : "+startDate +"to "+ startDate);
 				String fileName="GreyList_Incremental_"+utility.convertToDate(startDate)+".csv";
 				log.info("file path and name is:  "+fileName);
 				saveDataIntoFile(filter,fileName,filePath);

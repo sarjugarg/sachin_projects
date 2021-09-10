@@ -151,7 +151,8 @@ public class ConsignmentInsertUpdate {
                 myWriter = new FileWriter(file);
             }
 
-            period = cEIRFeatureFileParser.checkGraceStatus(conn);
+            period = cEIRFeatureFileParser.checkGraceStatus(conn);  // grace / postgrace
+            
             feature_file_management = ceirfunction.getFeatureFileManagement(conn, feature_file_mapping.get("mgnt_table_db"), txn_id); // select * from " + management_db + " where
             if (operator.equalsIgnoreCase("Stolen") || operator.equalsIgnoreCase("Recovery") || operator.equalsIgnoreCase("Block") || operator.equalsIgnoreCase("Unblock")) {
                 stolnRcvryDetails = cEIRFeatureFileParser.getStolenRecvryDetails(conn, txn_id);
@@ -160,7 +161,7 @@ public class ConsignmentInsertUpdate {
             logger.info("OPERATOR/FEATURE--" + operator + "--SUBFEATURE--" + sub_feature + "");
             bw.write("DEVICETYPE,DeviceIdType,MultipleSIMStatus,S/NofDevice,IMEI,Devicelaunchdate,DeviceStatus, Error Code ,Error Message ");
             bw.newLine();
-            while (rs.next()) {
+            while (rs.next()) {   // raw db records 
                 logger.info("Served IMEI  =" + rs.getString("IMEIESNMEID"));
                 device_info.put("DeviceIdType", rs.getString("DeviceIdType"));
                 device_info.put("IMEIESNMEID", rs.getString("IMEIESNMEID"));
@@ -179,19 +180,18 @@ public class ConsignmentInsertUpdate {
                 my_rule_detail = rule_filter.getMyFeatureRule(conn, device_info, rulelist, myWriter, bw);
                 logger.info("GetMyFeatureRule Error Flag  --    " + my_rule_detail.get("errorFlag"));
                 String fileArray = device_info.get("DeviceType") + "," + device_info.get("DeviceIdType") + "," + device_info.get("MultipleSIMStatus") + "," + device_info.get("SNofDevice") + "," + device_info.get("IMEIESNMEID") + "," + device_info.get("Devicelaunchdate") + "," + device_info.get("DeviceStatus") + "";
-                if (my_rule_detail.get("errorFlag").equals("0")) {
+                if (my_rule_detail.get("errorFlag").equals("0")) {   // details Pass
                     logger.info("Error Flag 0  ");
                     bw.write(fileArray);
                     bw.newLine();
                 } else {   // execute Action False
                     logger.info("Action_output." + my_rule_detail.get("action_output"));
-                    if (my_rule_detail.get("action_output").equalsIgnoreCase("Failure")) {//action is failed
+                    if (my_rule_detail.get("action_output").equalsIgnoreCase("Failure")) {//action is failed +  on which rule it is failed 
                         bw.write(fileArray + ", Action is not Completed for  " + my_rule_detail.get("rule_name"));
                         bw.newLine();
                     }
                     countError++;
                 }
-
                 update_sno = Integer.parseInt(rs.getString("sno"));
             }                 // END While 
 //               if (update_sno != 0) {
@@ -201,7 +201,7 @@ public class ConsignmentInsertUpdate {
             String error_file_path = errorFilePath + txn_id + "/" + txn_id + "_error.csv";
             logger.info("CountError(if 0: Process Pass  )  -- " + countError);
             if (countError != 0) {
-                ceirfunction.UpdateStatusViaApi(conn, txn_id, 1, operator);
+                ceirfunction.UpdateStatusViaApi(conn, txn_id, 1, operator);    
                 ceirfunction.updateFeatureFileStatus(conn, txn_id, 4, operator, sub_feature); // update web_action_db
             } else {
                 logger.info("File  moving to old Folder ");

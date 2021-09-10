@@ -29,7 +29,7 @@ public class CheckImeiController {  //sachin
         String feature = checkImeiValuesEntity.getFeature().trim().replaceAll(" ", "");
         String imei = checkImeiValuesEntity.getImei();
         Long imei_type = checkImeiValuesEntity.getImei_type();
-        logger.info("Feature   " + feature + user_type);
+        logger.info("Feature   " + feature + user_type);  
         logger.info("UsrType   " + user_type);
         logger.info("Imei_type (devIdType)   " + imei_type);
         logger.info("Imei   " + imei);
@@ -45,11 +45,9 @@ public class CheckImeiController {  //sachin
             cImsg.setErrorMessage(rulePass);
             cImsg.setStatus("Fail");
             cImsg.setDeviceId(imei.substring(0,8));
-            
         }
         mapping = new MappingJacksonValue(cImsg);
-//        logger.info("Response of View =" + mapping);
-        return mapping;
+         return mapping;
     }
 
 }

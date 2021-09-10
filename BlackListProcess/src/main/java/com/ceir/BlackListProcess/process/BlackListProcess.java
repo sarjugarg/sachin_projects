@@ -87,7 +87,7 @@ public class BlackListProcess {
 			if(greyListDb.getExpiryDate()!=null) {
 			if(currentDate.after(greyListDb.getExpiryDate())) {
 				log.info("if grace period for this imei is completed: "+greyListDb.getImei());	
-				log.info("so move this grey list data to greylist history and blacklist table");
+				log.info("so move this grey list data to greylist history and blacklist  , blacklist history table");
 				GreylistDbHistory greyListHistory=new GreylistDbHistory(
 //                                        new Date(),new Date(),
 						greyListDb.getImei(), greyListDb.getRoleType(), greyListDb.getUserId(),

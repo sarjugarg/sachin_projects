@@ -124,7 +124,7 @@ public class SmsServiceUserReg implements Runnable {
                                     boolean emailStatus = false;
                                    if (toEmail != null && !toEmail.isEmpty()) {
                                         log.info("toSms  " + toEmail);
-                                        log.info("fromEmail  " +  fromEmail.getValue() );
+                                        log.info("fromSms  " +  fromEmail.getValue() );
                                              emailStatus = emailUtil.sendSmss(toEmail, fromEmail.getValue(),
                                                      notification.getSubject(), body, notificationData.size(), sNo,
                                                      sleepTimeinMilliSec);

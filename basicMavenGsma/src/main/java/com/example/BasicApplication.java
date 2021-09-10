@@ -56,7 +56,7 @@ public class BasicApplication {
      public void gsmaApplication() {
           GsmaDbDao snt = new GsmaDbDao();
           final String JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-          final String DB_URL = "jdbc:oracle:thin:@dmc-prod-db:1521/dmcproddb";
+          final String DB_URL = "jdbc:oracle:thin:@PRO-DBR-SCAN:1522/dmcprdb";
           final String USER = "CRESTELCEIR";
           final String PASS = "CRESTELCEIR";
           Connection conn = null;
@@ -85,9 +85,10 @@ public class BasicApplication {
           try {
                LogWriter ls = new LogWriter();
                Statement stmt = conn.createStatement();
-
-  ResultSet rs1 = stmt.executeQuery("    select distinct tac   from device_usage_db where (tac not in(select device_id from gsma_tac_db) and tac not in(select tac from gsma_invalid_tac_db)) ");
-               Set<String> hash_Set = new HashSet<String>();
+               
+            logger.info("  select distinct tac   from device_usage_db where (tac not in(select device_id from gsma_tac_db) and tac not in(select tac from gsma_invalid_tac_db)) ");
+           ResultSet rs1 = stmt.executeQuery("    select distinct tac   from device_usage_db where (tac not in(select device_id from gsma_tac_db) and tac not in(select tac from gsma_invalid_tac_db)) ");
+                  Set<String> hash_Set = new HashSet<String>();
                while (rs1.next()) {
                     hash_Set.add(rs1.getString(1));
                }
@@ -129,7 +130,7 @@ public class BasicApplication {
                          if (product.getGsmaApprovedTac().equals("Yes")) {
                               snt.databaseMapper(message, conn);
                          } else {
-                              snt.invalidGsmaDb(product.getDeviceId(), conn);
+                              snt.invalidGsmaDb(imei_tac, conn);
                          }
                     } catch (Exception e) {
                          logger.info("getGsmaApprovedTac ERror : " + e);

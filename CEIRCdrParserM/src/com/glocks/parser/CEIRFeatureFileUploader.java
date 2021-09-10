@@ -1,6 +1,5 @@
 package com.glocks.parser;
 
-import static com.glocks.parser.CEIRFeatureFileFunctions.*;
 import com.glocks.parser.service.ConsignmentInsertUpdate;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -48,7 +47,7 @@ public class CEIRFeatureFileUploader {
                 ceirfunction.updateFeatureFileStatus(conn, file_details.getString("txn_id"), 1, file_details.getString("feature"), file_details.getString("sub_feature"));  //update web_action_db set state 1
                 if (file_details.getString("feature").equalsIgnoreCase("Register Device")) {
                     if ((file_details.getString("sub_feature").equalsIgnoreCase("Register")) || (file_details.getString("sub_feature").equalsIgnoreCase("Add Device"))) {     //'Add Device'
-                        ceirfunction.UpdateStatusViaApi(conn, file_details.getString("txn_id"), 0, file_details.getString("feature"));
+                        ceirfunction.UpdateStatusViaApi(conn, file_details.getString("txn_id"), 0, file_details.getString("feature"));  // ravi sir api who update status
                         ceirfunction.updateFeatureFileStatus(conn, file_details.getString("txn_id"), 2, file_details.getString("feature"), file_details.getString("sub_feature")); // update web_action_db           
                         break;
                     } else if (file_details.getString("sub_feature").equalsIgnoreCase("Clear")) {
@@ -203,9 +202,9 @@ public class CEIRFeatureFileUploader {
                     }
 
                     if (file_details.getString("sub_feature").equalsIgnoreCase("delete") || file_details.getString("sub_feature").equalsIgnoreCase("approve") || file_details.getString("sub_feature").equalsIgnoreCase("reject")) {
-                        logger.info("sub_feature ...  DELETE / APPROVE " + file_details.getString("sub_feature"));
+                        logger.info("sub_feature ...  DELETE   " + file_details.getString("sub_feature"));
                         ceirfunction.updateFeatureFileStatus(conn, file_details.getString("txn_id"), 2, file_details.getString("feature"), file_details.getString("sub_feature")); // update web_action_db               
-                        logger.info("WEbaction status  2 Done ");
+                        logger.info("WEb action status  2 Done ");
                         break;
                     }
                     if (file_details.getString("sub_feature").equalsIgnoreCase("register") || file_details.getString("sub_feature").equalsIgnoreCase("update") || file_details.getString("sub_feature").equalsIgnoreCase("upload")) {

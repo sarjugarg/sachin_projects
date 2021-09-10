@@ -5,9 +5,9 @@
             
         
     <groupId>com</groupId>
-    <artifactId>BasicApplication</artifactId>
+    <artifactId>GsmaTacUpdate</artifactId>
     <version>0.1</version>
-    <name>BasicApplication</name>
+    <name>GsmaTacUpdate</name>
     <description>Gsma Module </description>
     
     
@@ -22,8 +22,6 @@
         <version>2.2.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-        
-
     <dependencies>
         
         
@@ -55,10 +53,10 @@
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
@@ -110,8 +108,6 @@
         </dependency>
     </dependencies>
 
- 
-	
     <build>
         <plugins>
             <plugin>

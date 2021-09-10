@@ -74,14 +74,14 @@ public class GsmaValueServiceImpl  {
           DuplicateValueModel duplicateValueModel = null;
           try {
                logger.info("Find if Combination Present");
-               usagesValueModel = usagesValueRepository.getByImeiAndMsisdn(imei, msisdn);
+               usagesValueModel = usagesValueRepository.getByImeiAndMsisdn(imei, msisdn);  //usage db
                logger.info("Value From usagesValueModel Query : " + usagesValueModel);
                if (usagesValueModel == null) {
                     logger.info(":: ");
-                    duplicateValueModel = duplicateValueRepository.getByImeiAndMsisdn(imei, msisdn);
+                    duplicateValueModel = duplicateValueRepository.getByImeiAndMsisdn(imei, msisdn);  // dublicate dv
                     logger.info("Value From duplicateValueModel Query : " + duplicateValueModel);
                     if (duplicateValueModel == null) {
-                         logger.info(":::: ");
+                         logger.info("  :::: ");
                          return "No";
                     } else {
                          return "Yes";

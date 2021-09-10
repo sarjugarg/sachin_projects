@@ -469,7 +469,7 @@ public class HexFileReader {
 
                     if (line.replace(",", " ").trim().length() > 0) {
                          errorString = "";
-                         if (k == 0) {
+                         if (k == 0) {    // check header
                               if (data.length == 1) {
                                    logger.info(" File is corrupted " + data.toString() + "  ... " + line);
                                    errFile.gotoErrorFile(conn, txn_id, "   Error Code :CON_FILE_0010, Error Message: The file is corrupt.    ");

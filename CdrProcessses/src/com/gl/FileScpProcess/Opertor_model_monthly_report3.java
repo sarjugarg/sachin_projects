@@ -25,16 +25,19 @@ public class Opertor_model_monthly_report3 {
         if (args.length > 2) {
             time = args[2];
         }
+         StringBuffer newString  = new StringBuffer(time);
+       String timeline =  newString.insert(4, "-").toString();
+        
         try {
-            String query = " delete from opertor_model_monthly_report where  file_month = '" + time + "' and operator =    '" + operator + "' ";
+            String query = " delete from opertor_model_monthly_report where  file_month = '" + timeline + "' and operator =    '" + operator + "' ";
             log.info(query);
             Connection conn = (Connection) new com.gl.FileScpProcess.MySQLConnection().getConnection();
 
             Statement stmtnew = conn.createStatement();
             stmtnew.executeUpdate(query);
             stmtnew.close();
-            query = " insert into opertor_model_monthly_report (created_on ,modified_on, operator , model_name , model_count ,file_month  )  \n"
-                    + "  select current_timestamp ,current_timestamp , MOBILE_OPERATOR , MODEL_NAME , count(tac) , '" + time + "' from device_usage_Db inner join gsma_tac_db on   device_usage_Db.tac =  gsma_tac_db.device_id where MOBILE_OPERATOR =  UPPER('" + operator + "')  and IMEI_ARRIVAL_TIME like '" + time + "%'  group by model_name ,MOBILE_OPERATOR    ";
+            query = " insert into opertor_model_monthly_report (created_on ,modified_on, operator , model_name , model_count ,file_month  , brand_name , MARKETING_NAME )  \n"
+                    + "  select current_timestamp ,current_timestamp , MOBILE_OPERATOR , MODEL_NAME , count(tac) , '" + timeline + "'  , brand_name , MARKETING_NAME  from device_usage_Db inner join gsma_tac_db on   device_usage_Db.tac =  gsma_tac_db.device_id where MOBILE_OPERATOR =  UPPER('" + operator + "')  and IMEI_ARRIVAL_TIME like '" + time + "%'  group by model_name ,MOBILE_OPERATOR ,brand_name , MARKETING_NAME   ";
             log.info(query);
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);

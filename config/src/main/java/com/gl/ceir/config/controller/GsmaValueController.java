@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-public class GsmaValueController { 
+public class GsmaValueController {   // sachin
      private static final Logger logger = Logger.getLogger(GsmaValueController.class);
 
      
@@ -46,7 +46,7 @@ public class GsmaValueController {
 
           String ismi = null;
           UsagesValueModel usagesValueModel = null;
-          if (imei == null) {
+          if (imei == null) {  // imei not found    then    going ot fetch details by msisdn 
                usagesValueModel = GsmaValueServiceImpl.getimeiValbymsisdn(msisdn);
                if (usagesValueModel == null) {
                     logger.info("IMEI IS NOT FOUND");
@@ -67,7 +67,7 @@ public class GsmaValueController {
           logger.info("  MSISDN ISS ....." + msisdn);
           int tac = 00;
           if (imei != "NA") {
-               tac = Integer.parseInt(imei.toString().trim().substring(0, 8));
+               tac = Integer.parseInt(imei.toString().trim().substring(0, 8));     // 8 digit
           }
           logger.info("  tac  ....." + tac);
           GsmaValueModel getvals = GsmaValueServiceImpl.getAll(tac);
@@ -135,9 +135,10 @@ public class GsmaValueController {
                     getvals.setTAC(usagesValueModel.getTAC());
                     getvals.setUPDATE_FILENAME(usagesValueModel.getUPDATE_FILENAME());
                }
+            
+               
                getvals.setIdentifierType(identifierType);
                mapping = new MappingJacksonValue(getvals);
-               
                
                
           }
@@ -146,7 +147,7 @@ public class GsmaValueController {
           return mapping;
      }
 
-     @ApiOperation(value = "Check Imei Msisdn Combination Present")
+     @ApiOperation(value = " Check Imei Msisdn Combination Present ")
      @PostMapping(path = "gsma/CheckImeiMsisdnValues")
      public String CheckImeiMsisdnValues(String imei, String msisdn) {
           logger.info("Imei:   " + imei + " ;msisdn: " + msisdn);

@@ -29,7 +29,7 @@ public class CEIRFeatureFileParser {
         logger.info(" CEIRFeatureFileParser.class ");
         String feature = null;
         CEIRFeatureFileFunctions ceirfunction = new CEIRFeatureFileFunctions();
-        ResultSet featurers = ceirfunction.getFileDetails(conn, 2, featureNam);     //select * from web_action_db 
+        ResultSet featurers = ceirfunction.getFileDetails(conn, 2, featureNam);     // Select * from web_action_db 
         try {
             while (featurers.next()) {
                 System.out.println("" + featurers.getString("txn_id"));
